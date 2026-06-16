@@ -187,8 +187,8 @@ ciphertext, tag = sealed[:-16], sealed[-16:]
 
 ### Security note
 
-`$8$` is real encryption, but its strength rests entirely on the master password and the (low) default PBKDF2 iteration count of 100. Treat the master password as a high-value secret; anyone holding it can decrypt every `$8$` value in a config.
+`$8$` is real encryption, but its strength rests entirely on the master password. Treat the master password as a high-value secret; anyone holding it can decrypt every `$8$` value in a config.
 
 ## Credits
 
-The `$8$` format is undocumented and, as far as I could find, had no public decoder. It was reverse-engineered with AI help: Claude ran the known-plaintext search, spotted that AES-GCM's ciphertext is independent of the tag and AAD (which made the search tractable), and identified the `iv[:12]` nonce quirk that defeats naive implementations. The decisive input was a device transcript with a known plaintext.
+The `$8$` format is undocumented and, as far as I could find, had no public decoder. It was reverse-engineered with AI help: Claude ran the known-plaintext search, spotted that AES-GCM's ciphertext is independent of the tag and AAD (which made the search tractable), and identified the `iv[:12]` nonce quirk that defeats naive implementations.
