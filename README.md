@@ -9,6 +9,8 @@ Encrypt and decrypt Juniper `$8$` (type 8) passwords, from the command line or P
 
 The `$8$` format is **genuine authenticated encryption**, keyed by the device master password (`set system master-password`). Unlike the reversible, keyless `$9$` substitution cipher, a `$8$` secret cannot be recovered without that master password: the same master password is required to both encrypt and decrypt.
 
+> **Prefer a browser?** Encode and decode `$8$` (and `$9$`, and Nokia SR OS custom-hash) at **[network-secret-decoder.pages.dev](https://network-secret-decoder.pages.dev/)**. It runs the same algorithm fully client-side - nothing you type is ever sent to a server.
+
 > The `$8$` algorithm is not documented by Juniper. It was reverse-engineered and verified against a real JUNOS 23.2 device (the GCM authentication tag verifies). See [Algorithm](#algorithm) for the full details.
 
 ## Run without installing

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Docs
+
+- README: link the browser-based encoder/decoder at [network-secret-decoder.pages.dev](https://network-secret-decoder.pages.dev/).
+
 ## v0.1.0 - 2026-06-16
 
 - Initial release: `decrypt()`, `encrypt()`, `check()` Python API and the
