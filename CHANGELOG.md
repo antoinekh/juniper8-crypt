@@ -5,6 +5,7 @@
 ### Docs
 
 - README: link the browser-based encoder/decoder at [network-secret-decoder.pages.dev](https://network-secret-decoder.pages.dev/).
+- Correct the "undocumented" framing: Juniper does document the `$8$` format, but the docs omit that the 16-byte IV is truncated to its first 12 bytes for the GCM nonce; that missing detail is what was reverse-engineered. Updated the README and the module docstring.
 
 ## v0.1.0 - 2026-06-16
 

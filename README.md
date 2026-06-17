@@ -11,7 +11,7 @@ The `$8$` format is **genuine authenticated encryption**, keyed by the device ma
 
 > **Prefer a browser?** Encode and decode `$8$` (and `$9$`, and Nokia SR OS custom-hash) at **[network-secret-decoder.pages.dev](https://network-secret-decoder.pages.dev/)**. It runs the same algorithm fully client-side - nothing you type is ever sent to a server.
 
-> The `$8$` algorithm is not documented by Juniper. It was reverse-engineered and verified against a real JUNOS 23.2 device (the GCM authentication tag verifies). See [Algorithm](#algorithm) for the full details.
+> Juniper [documents the `$8$` format](https://www.juniper.net/documentation/us/en/software/junos/user-access/topics/topic-map/master-password-configuration-encryption.html) (AES256-GCM, PBKDF2, the field layout, the ASCII64/base64 encoding), but the documentation is incomplete in the one way that matters: it never states that the 16-byte `iv` field is truncated to its first 12 bytes for the GCM nonce. Implement it by the book and the authentication tag never verifies, which is why no public decoder existed. That missing detail was reverse-engineered and verified against a real JUNOS 23.2 device (the GCM authentication tag verifies). See [Algorithm](#algorithm) for the full details.
 
 ## Run without installing
 
@@ -193,4 +193,4 @@ ciphertext, tag = sealed[:-16], sealed[-16:]
 
 ## Credits
 
-The `$8$` format is undocumented and, as far as I could find, had no public decoder. It was reverse-engineered with AI help: Claude ran the known-plaintext search, spotted that AES-GCM's ciphertext is independent of the tag and AAD (which made the search tractable), and identified the `iv[:12]` nonce quirk that defeats naive implementations.
+Juniper documents the `$8$` format, but the documentation is incomplete: it omits that the 16-byte `iv` field is truncated to its first 12 bytes for the GCM nonce (and the tag/salt lengths, the exact PRF, and the no-AAD detail). A by-the-book implementation therefore fails authentication, and as far as I could find there was no public decoder. The missing pieces were reverse-engineered with AI help: Claude ran the known-plaintext search, spotted that AES-GCM's ciphertext is independent of the tag and AAD (which made the search tractable), and identified the `iv[:12]` nonce quirk that defeats naive implementations.

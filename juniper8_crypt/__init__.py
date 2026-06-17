@@ -6,8 +6,11 @@ genuine authenticated encryption keyed by the device master password
 (``set system master-password``). The same master password is required to
 both encrypt and decrypt: without it, $8$ secrets cannot be recovered.
 
-The algorithm is not publicly documented; it was reverse-engineered and
-verified against a real JUNOS 23.2 device (tag authentication passes):
+Juniper documents the format, but the documentation is incomplete: it omits
+that only the first 12 bytes of the 16-byte iv field are used as the GCM
+nonce, so a by-the-book implementation fails authentication. That missing
+detail was reverse-engineered and verified against a real JUNOS 23.2 device
+(tag authentication passes):
 
     $8$<crypt-algo>$<hash-algo>$<iterations>$<salt>$<iv>$<tag>$<ciphertext>
 
