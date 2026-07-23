@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "juniper8-crypt"
-version = "0.1.0"
+version = "0.2.0"
 description = "Python library and CLI to encrypt, decrypt, and compare Juniper $8$ (type 8) passwords"
 readme = "README.md"
 license = { file = "LICENSE" }

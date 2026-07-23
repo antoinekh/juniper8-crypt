@@ -5,11 +5,16 @@
 [![Python versions](https://img.shields.io/pypi/pyversions/juniper8-crypt)](https://pypi.org/project/juniper8-crypt/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+> [!IMPORTANT]
+> **This repository is read-only and no longer developed.** Development has moved to **[network-secret](https://github.com/antoinekh/network-secret)**, which brings `juniper8-crypt`, `juniper9-crypt`, and the Nokia SR OS custom-hash cipher together in a single package with a single CLI.
+>
+> Migrating is an import path change and nothing more: `pip install network-secret`, then `from network_secret import juniper8`. The `encrypt()`, `decrypt()`, and `check()` signatures are identical.
+
 Encrypt and decrypt Juniper `$8$` (type 8) passwords, from the command line or Python.
 
 The `$8$` format is **genuine authenticated encryption**, keyed by the device master password (`set system master-password`). Unlike the reversible, keyless `$9$` substitution cipher, a `$8$` secret cannot be recovered without that master password: the same master password is required to both encrypt and decrypt.
 
-> **Prefer a browser?** Encode and decode `$8$` (and `$9$`, and Nokia SR OS custom-hash) at **[network-secret-decoder.pages.dev](https://network-secret-decoder.pages.dev/)**. It runs the same algorithm fully client-side - nothing you type is ever sent to a server.
+> **Prefer a browser?** Encode and decode `$8$` (and `$9$`, and Nokia SR OS custom-hash) at **[network-secret-website.pages.dev](https://network-secret-website.pages.dev/)**. It runs the same algorithm fully client-side - nothing you type is ever sent to a server.
 
 > Juniper [documents the `$8$` format](https://www.juniper.net/documentation/us/en/software/junos/user-access/topics/topic-map/master-password-configuration-encryption.html) (AES256-GCM, PBKDF2, the field layout, the ASCII64/base64 encoding), but the documentation is incomplete in the one way that matters: it never states that the 16-byte `iv` field is truncated to its first 12 bytes for the GCM nonce. Implement it by the book and the authentication tag never verifies, which is why no public decoder existed. That missing detail was reverse-engineered and verified against a real JUNOS 23.2 device (the GCM authentication tag verifies). See [Algorithm](#algorithm) for the full details.
 

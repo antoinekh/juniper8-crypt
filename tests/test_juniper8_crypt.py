@@ -81,6 +81,16 @@ def test_decrypt_invalid_iterations() -> None:
         decrypt("$8$aes256-gcm$hmac-sha2-256$xx$a$b$c$d", MASTER)
 
 
+@pytest.mark.parametrize("digits", ["²", "١٠٠"])
+def test_decrypt_rejects_non_ascii_iterations(digits: str) -> None:
+    # str.isdigit() is True for non-ASCII digits. Superscripts ("²") make int()
+    # fail with a generic parsing error, while Arabic-Indic digits ("١٠٠") parse
+    # cleanly and slip past validation entirely. Both must be rejected here.
+    ciphertext = KNOWN_VECTORS[0][0].replace("$100$", f"${digits}$", 1)
+    with pytest.raises(ValueError, match="Invalid iteration count"):
+        decrypt(ciphertext, MASTER)
+
+
 def test_decrypt_iterations_out_of_range() -> None:
     # A hostile value must not force an arbitrarily expensive PBKDF2 derivation.
     with pytest.raises(ValueError, match="out of range"):

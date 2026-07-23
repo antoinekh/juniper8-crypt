@@ -133,7 +133,9 @@ def decrypt(ciphertext: str, master_password: str) -> str:
         raise ValueError(f"Unsupported crypt-algo {crypt_algo!r}: only {CRYPT_ALGO}")
     if hash_algo != HASH_ALGO:
         raise ValueError(f"Unsupported hash-algo {hash_algo!r}: only {HASH_ALGO}")
-    if not iters.isdigit():
+    if not (iters.isascii() and iters.isdigit()):
+        # str.isdigit() is True for non-ASCII digits (e.g. superscript "²")
+        # that int() cannot parse; require plain ASCII digits.
         raise ValueError(f"Invalid iteration count: {iters!r}")
     if not MIN_ITERATIONS <= int(iters) <= MAX_ITERATIONS:
         raise ValueError(
